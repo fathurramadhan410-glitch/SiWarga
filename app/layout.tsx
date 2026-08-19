@@ -3,8 +3,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 export const metadata = {
-  title: "SiWarga - Portal RT 001/005",
-  description: "Sistem Informasi Administrasi Warga RT 001 / RW 005",
+  title: "SiWarga - Portal RT 17/02",
+  description: "Sistem Informasi Administrasi Warga RT 17 / RW 02",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -7,7 +7,7 @@ export default function CaraKerja() {
           {[
             { no: "01", t: "Masukkan NIK", d: "Warga memasukkan 16 digit NIK pada kolom pengajuan." },
             { no: "02", t: "Pilih Surat & Keterangan", d: "Sistem menampilkan surat yang tersedia. Warga memilih surat dan mengisi keterangan singkat." },
-            { no: "03", t: "Unduh dengan QR Code", d: "Surat langsung siap diunduh tanpa verifikasi RT. Dilengkapi QR Code untuk keaslian dokumen." }
+            { no: "03", t: "Unduh dengan QR Code", d: "Surat langsung siap diunduh . Dilengkapi TTD QR Code untuk keaslian dokumen." }
           ].map((s, i) => (
             <div key={i} className="flex items-start gap-6">
               <div className="text-4xl font-extrabold text-sky-200 w-16">{s.no}</div>

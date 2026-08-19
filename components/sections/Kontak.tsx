@@ -6,7 +6,7 @@ export default function Kontak() {
         {/* Info Kontak */}
         <div>
           <h2 className="text-3xl font-extrabold mb-4 text-sky-800">Hubungi Kami</h2>
-          <p className="text-gray-600 mb-8">Pengurus RT 001 / RW 005 siap membantu Anda. Silakan hubungi melalui kontak berikut atau datang langsung ke lokasi.</p>
+          <p className="text-gray-600 mb-8">Pengurus RT 17 / RW 02 siap membantu Anda. Silakan hubungi melalui kontak berikut atau datang langsung ke lokasi.</p>
           
           <div className="space-y-5">
             <div className="flex items-start gap-4">
@@ -14,8 +14,8 @@ export default function Kontak() {
                 <svg className="w-6 h-6 text-sky-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
               </div>
               <div>
-                <h4 className="font-semibold text-gray-800">Alamat Kantor</h4>
-                <p className="text-sm text-gray-600">Jl. Sukamaju No. 12, Kel. Sukamaju, Kec. Cibadak, Kota Bandung 40241</p>
+                <h4 className="font-semibold text-gray-800">Alamat Kantor Developer</h4>
+                <p className="text-sm text-gray-600">Jl. Tembus Mantuil, Basirih No. 51, Kel. Basirih Selatan, Kec. Banjarmasin Selatan, Kota Banjarmasin 70246</p>
               </div>
             </div>
             
@@ -35,7 +35,7 @@ export default function Kontak() {
               </div>
               <div>
                 <h4 className="font-semibold text-gray-800">Email</h4>
-                <p className="text-sm text-gray-600">rt005.sukamaju@bandung.go.id</p>
+                <p className="text-sm text-gray-600">siwargart17@banjarmasin.go.id</p>
               </div>
             </div>
           </div>

@@ -25,7 +25,7 @@ export default function Navbar() {
           </svg>
           <div className="flex flex-col leading-tight">
             <span className="text-xl font-bold text-white tracking-tight">SiWarga</span>
-            <span className="text-[10px] text-white font-medium">RT 01 / 05</span>
+            <span className="text-[10px] text-white font-medium">RT 17 / 02</span>
           </div>
         </div>
 
@@ -39,7 +39,7 @@ export default function Navbar() {
           <button onClick={() => scrollToSection('berita')} className="text-white hover:text-sky-200 font-semibold transition-colors">Berita</button>
           <button onClick={() => scrollToSection('kontak')} className="text-white hover:text-sky-200 font-semibold transition-colors">Kontak</button>
           <Link href="/admin/login" className="bg-white text-sky-800 px-4 py-2 rounded-lg transition-colors font-semibold ml-2">
-            Login Admin
+            Login
           </Link>
         </div>
       </nav>
