@@ -112,13 +112,21 @@ export default function RiwayatPengajuan() {
         </div>
       )}
 
-      {/* AREA CETAK SURAT A4 (Hanya muncul saat print) */}
+            {/* AREA CETAK SURAT A4 (Hanya muncul saat print) */}
       {printData && (
         <div className="hidden print:block">
           <div id="print-area">
             <SuratFormat 
               jenis={printData.surat.jenis_surat} 
-              data={{ nama: printData.warga.nama, nik: printData.warga.nik, alamat: printData.warga.alamat, pekerjaan: printData.warga.pekerjaan }} 
+              data={{ 
+                nama: printData.warga.nama, 
+                nik: printData.warga.nik, 
+                alamat: printData.warga.alamat, 
+                pekerjaan: printData.warga.pekerjaan,
+                tempatLahir: printData.warga.tempat_lahir,
+                tanggalLahir: printData.warga.tanggal_lahir ? new Date(printData.warga.tanggal_lahir).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : "-",
+                jenisKelamin: printData.warga.jenis_kelamin
+              }} 
               keperluan={printData.surat.keperluan} 
               nomorSurat={printData.surat.nomor_surat} 
             />

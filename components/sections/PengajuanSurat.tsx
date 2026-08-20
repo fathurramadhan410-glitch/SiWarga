@@ -184,12 +184,20 @@ export default function PengajuanSurat() {
         </div>
       </section>
 
-      {/* AREA CETAK SURAT A4 (Hanya muncul saat print) */}
+            {/* AREA CETAK SURAT A4 (Hanya muncul saat print) */}
       {suratSelesai && warga && (
         <div className="hidden print:block">
           <SuratFormat 
             jenis={suratSelesai.jenis_surat} 
-            data={{ nama: warga.nama, nik: warga.nik, alamat: warga.alamat, pekerjaan: warga.pekerjaan }} 
+            data={{ 
+              nama: warga.nama, 
+              nik: warga.nik, 
+              alamat: warga.alamat, 
+              pekerjaan: warga.pekerjaan,
+              tempatLahir: warga.tempat_lahir,
+              tanggalLahir: warga.tanggal_lahir ? new Date(warga.tanggal_lahir).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : "-",
+              jenisKelamin: warga.jenis_kelamin
+            }} 
             keperluan={suratSelesai.keperluan} 
             nomorSurat={suratSelesai.nomor_surat} 
           />

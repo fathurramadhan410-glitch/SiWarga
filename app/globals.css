@@ -31,15 +31,26 @@ body {
   .print\:block {
     display: block !important;
   }
-  /* Mengatur ukuran kertas A4 dan menghapus margin browser */
+  
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 100%;
+    overflow: hidden;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
   @page {
     size: A4;
     margin: 0;
   }
-  html, body {
-    margin: 0 !important;
-    padding: 0 !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
+
+  #print-area {
+    width: 210mm;
+    height: 297mm;
+    overflow: hidden;
+    page-break-after: avoid;
+    page-break-inside: avoid;
   }
 }
