@@ -12,7 +12,7 @@ export default function Hero() {
           Portal Resmi RT 17 / RW 02
         </span>
         <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
-          Modernisasi Administrasi Warga
+          Digitalisasi Administrasi Warga
         </h1>
         <p className="text-lg md:text-xl text-white mb-10 max-w-2xl mx-auto font-medium leading-relaxed">
           Selamat datang di portal digital RT 17 / RW 02. Melayani dengan transparan, cepat, dan akuntabel tanpa perlu antre.
