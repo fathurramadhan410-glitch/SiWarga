@@ -10,7 +10,7 @@ const RT_CONFIG = {
   alamatKantor: "Jl. Tembus Mantuil, Basirih No. 51, Kec. Banjarmasin Selatan, Kota Banjarmasin 70246",
   rt: "17",
   rw: "02",
-  namaKetuaRT: "H. Sutrisno, S.Sos", // Ganti dengan nama asli Ketua RT Anda
+  namaKetuaRT: "Fathur Ramadhan,S.Tr.Kom.", // Ganti dengan nama asli Ketua RT Anda
 };
 
 interface SuratProps {
