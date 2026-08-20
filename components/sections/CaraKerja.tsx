@@ -2,7 +2,7 @@ export default function CaraKerja() {
   const steps = [
     { no: "01", t: "Masukkan NIK", d: "Warga memasukkan 16 digit NIK pada kolom pengajuan untuk verifikasi identitas awal." },
     { no: "02", t: "Pilih Surat & Keterangan", d: "Sistem menampilkan daftar surat yang tersedia. Warga memilih jenis surat dan mengisi keterangan singkat." },
-    { no: "03", t: "Unduh dengan QR Code", d: "Surat langsung diproses dan siap diunduh. Dilengkapi TTD Elektronik QR Code untuk verifikasi keaslian dokumen." }
+    { no: "03", t: "Unduh Surat", d: "Surat langsung diproses dan siap diunduh. Dilengkapi TTD Elektronik QR Code untuk verifikasi keaslian dokumen." }
   ];
 
   return (
