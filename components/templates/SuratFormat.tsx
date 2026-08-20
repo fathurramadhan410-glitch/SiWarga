@@ -4,13 +4,13 @@ import { QRCodeCanvas } from "qrcode.react";
 
 // KONFIGURASI RT (Bisa diubah sesuai data asli)
 const RT_CONFIG = {
-  kota: "Kota Bandung",
-  kecamatan: "Cibadak",
-  kelurahan: "Sukamaju",
-  alamatKantor: "Jl. Sukamaju No. 12, Kec. Cibadak, Kota Bandung 40241",
-  rt: "001",
-  rw: "005",
-  namaKetuaRT: "H. Sutrisno, S.Sos",
+  kota: "Kota Banjarmasin",
+  kecamatan: "Banjarmasin Selatan",
+  kelurahan: "Basirih Selatan",
+  alamatKantor: "Jl. Tembus Mantuil, Basirih No. 51, Kec. Banjarmasin Selatan, Kota Banjarmasin 70246",
+  rt: "17",
+  rw: "02",
+  namaKetuaRT: "H. Sutrisno, S.Sos", // Ganti dengan nama asli Ketua RT Anda
 };
 
 interface SuratProps {
@@ -94,7 +94,7 @@ export default function SuratFormat({ jenis, data, keperluan, nomorSurat }: Sura
       {/* KOP SURAT */}
       <div style={{ display: "flex", borderBottom: "3px double #000", paddingBottom: "10px", marginBottom: "20px", textAlign: "center" }}>
         <div style={{ width: "80px", marginRight: "15px", display: "flex", alignItems: "center" }}>
-          <div style={{ width: "100%", height: "80px", border: "1px solid #ccc", fontSize: "10px", display: "flex", alignItems: "center", justifyContent: "center" }}>LOGO</div>
+          <img src="/LOGO_KOTA_BANJARMASIN_PNG.png" alt="Logo Kota Banjarmasin" style={{ width: "100%", height: "80px", objectFit: "contain" }} />
         </div>
         <div style={{ flex: 1 }}>
           <h1 style={{ fontSize: "16pt", margin: 0 }}>PEMERINTAH {RT_CONFIG.kota.toUpperCase()}</h1>

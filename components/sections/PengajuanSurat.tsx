@@ -65,15 +65,16 @@ export default function PengajuanSurat() {
 
   return (
     <div className="w-full">
-      {/* BAGIAN APLIKASI (Hilang saat print) */}
       <section id="pengajuan" className="py-20 bg-white px-6 no-print print:hidden">
         <div className="max-w-3xl mx-auto bg-white p-8 md:p-10 rounded-2xl shadow-lg border border-gray-100">
-          <h2 className="text-3xl font-extrabold mb-2 text-sky-800 text-center">Pengajuan Surat Mandiri</h2>
-          <p className="text-center text-gray-500 mb-8">Cari berdasarkan NIK (16 digit) atau Nama Lengkap.</p>
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-extrabold text-sky-800 mb-2">Pengajuan Surat Mandiri</h2>
+            <p className="text-gray-500">Cari berdasarkan NIK (16 digit) atau Nama Lengkap untuk memulai pengajuan surat administrasi.</p>
+          </div>
           
           {!suratSelesai && (
             <>
-              <div className="flex flex-col sm:flex-row gap-4 mb-6">
+              <div className="flex flex-col sm:flex-row gap-4 mb-6 bg-gray-50 p-4 rounded-xl border border-gray-200">
                 <input 
                   type="text" 
                   placeholder="Masukkan NIK atau Nama..." 
@@ -101,7 +102,7 @@ export default function PengajuanSurat() {
 
               {/* TAMPILAN DATA WARGA DALAM BENTUK TABEL */}
               {warga && !showForm && (
-                <div className="bg-white border border-gray-200 rounded-xl overflow-hidden mb-6">
+                <div className="bg-white border border-gray-200 rounded-xl overflow-hidden mb-6 shadow-sm">
                   <div className="bg-sky-800 text-white px-6 py-3">
                     <h3 className="font-bold">Data Warga Ditemukan</h3>
                   </div>
@@ -138,7 +139,7 @@ export default function PengajuanSurat() {
 
               {/* Form Pengajuan */}
               {showForm && warga && (
-                <div className="bg-white p-6 rounded-xl border border-gray-200 space-y-4">
+                <div className="bg-white p-6 rounded-xl border border-gray-200 space-y-4 shadow-sm">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Pilih Jenis Surat</label>
                     <select value={selectedSurat} onChange={(e) => setSelectedSurat(e.target.value)} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white text-gray-900">
@@ -184,20 +185,12 @@ export default function PengajuanSurat() {
         </div>
       </section>
 
-            {/* AREA CETAK SURAT A4 (Hanya muncul saat print) */}
+      {/* AREA CETAK SURAT A4 (Hanya muncul saat print) */}
       {suratSelesai && warga && (
         <div className="hidden print:block">
           <SuratFormat 
             jenis={suratSelesai.jenis_surat} 
-            data={{ 
-              nama: warga.nama, 
-              nik: warga.nik, 
-              alamat: warga.alamat, 
-              pekerjaan: warga.pekerjaan,
-              tempatLahir: warga.tempat_lahir,
-              tanggalLahir: warga.tanggal_lahir ? new Date(warga.tanggal_lahir).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : "-",
-              jenisKelamin: warga.jenis_kelamin
-            }} 
+            data={{ nama: warga.nama, nik: warga.nik, alamat: warga.alamat, pekerjaan: warga.pekerjaan }} 
             keperluan={suratSelesai.keperluan} 
             nomorSurat={suratSelesai.nomor_surat} 
           />

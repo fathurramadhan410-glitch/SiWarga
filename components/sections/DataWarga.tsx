@@ -22,7 +22,7 @@ export default function DataWarga() {
     <section id="data-warga" className="py-20 bg-gray-50 px-6">
       <div className="max-w-5xl mx-auto">
         <h2 className="text-3xl font-extrabold text-center text-sky-800 mb-2">Data Warga</h2>
-        <p className="text-center text-gray-500 mb-8">Daftar warga aktif beserta data sosial ekonomi (Privasi NIK terjaga).</p>
+        <p className="text-center text-gray-500 mb-8">Data warga aktif beserta data sosial ekonomi terintegrasi dengan aplikasi atau cek bansos Kementerian Sosial Republik Indonesia.</p>
         <div className="bg-white rounded-xl shadow-md overflow-x-auto border border-gray-100">
           <table className="min-w-full text-left text-sm">
             <thead className="bg-sky-800 text-white">

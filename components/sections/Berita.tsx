@@ -15,28 +15,30 @@ export default function Berita() {
   }, []);
 
   return (
-    <section id="berita" className="py-20 bg-white px-6">
+    <section id="berita" className="py-20 bg-gray-50 px-6">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-3xl font-extrabold text-center text-sky-800 mb-2">Berita & Informasi</h2>
-        <p className="text-center text-gray-500 mb-12">Kabar terbaru seputar kegiatan dan pengumuman RT 001/005.</p>
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-extrabold text-sky-800 mb-2">Berita & Informasi</h2>
+          <p className="text-gray-500">Kabar terbaru seputar kegiatan dan pengumuman RT 17 / RW 02.</p>
+        </div>
         
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {berita.map((b) => (
-            <div key={b.id} onClick={() => setSelectedBerita(b)} className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+            <div key={b.id} onClick={() => setSelectedBerita(b)} className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
               {b.gambar ? (
                 <img src={b.gambar} alt={b.judul} className="w-full h-48 object-cover" />
               ) : (
                 <div className="w-full h-48 bg-gray-100 flex items-center justify-center text-gray-400">Tidak Ada Foto</div>
               )}
-              <div className="p-5">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="bg-sky-100 text-sky-700 text-xs font-semibold px-2 py-1 rounded">{b.kategori}</span>
-                  <span className="text-xs text-gray-400">{new Date(b.tanggal).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}</span>
+              <div className="p-6 flex flex-col flex-grow">
+                <div className="flex justify-between items-center mb-3">
+                  <span className="bg-sky-100 text-sky-700 text-xs font-semibold px-2.5 py-1 rounded-full">{b.kategori}</span>
+                  <span className="text-xs text-gray-400">{new Date(b.tanggal).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
                 </div>
                 <h3 className="font-bold text-lg text-gray-800 mb-2 line-clamp-2">{b.judul}</h3>
-                <p className="text-sm text-gray-500 line-clamp-2">{b.ringkasan}</p>
-                <div className="mt-4 text-sky-600 text-sm font-semibold flex items-center gap-1">
-                  Baca Detail 
+                <p className="text-sm text-gray-500 line-clamp-3 mb-4 flex-grow">{b.ringkasan}</p>
+                <div className="mt-auto text-sky-600 text-sm font-semibold flex items-center gap-1 border-t border-gray-100 pt-4">
+                  Baca Selengkapnya 
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                 </div>
               </div>
@@ -63,7 +65,7 @@ export default function Berita() {
                 </button>
               </div>
               <h2 className="text-2xl font-extrabold text-gray-800 mb-4">{selectedBerita.judul}</h2>
-              <div className="text-gray-600 space-y-4 whitespace-pre-wrap text-justify">{selectedBerita.konten}</div>
+              <div className="text-gray-600 space-y-4 whitespace-pre-wrap text-justify leading-relaxed">{selectedBerita.konten}</div>
               <div className="mt-8 pt-4 border-t border-gray-100 flex items-center gap-3">
                 <div className="w-10 h-10 bg-sky-700 rounded-full flex items-center justify-center text-white font-bold">
                   {selectedBerita.penulis?.charAt(0) || "R"}
