@@ -6,7 +6,7 @@ import Link from "next/link";
 export default function AdminLogin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [showSuccess, setShowSuccess] = useState(false); // State untuk modal
+  const [modalStatus, setModalStatus] = useState<"success" | "error" | null>(null);
   const router = useRouter();
 
   const handleLogin = (e: React.FormEvent) => {
@@ -17,14 +17,20 @@ export default function AdminLogin() {
       localStorage.setItem("siwarga_auth", "true");
       
       // Tampilkan modal sukses
-      setShowSuccess(true);
+      setModalStatus("success");
       
-      // Set delay 2 detik sebelum pindah ke dashboard agar user sempat melihat notifnya
+      // Set delay 2 detik sebelum pindah ke dashboard
       setTimeout(() => {
         router.push("/admin/dashboard");
       }, 2000);
     } else {
-      alert("Username atau password salah! Silakan coba lagi.");
+      // Tampilkan modal gagal
+      setModalStatus("error");
+      
+      // Set delay 2.5 detik untuk menutup modal gagal
+      setTimeout(() => {
+        setModalStatus(null);
+      }, 2500);
     }
   };
 
@@ -44,7 +50,7 @@ export default function AdminLogin() {
             </div>
             <h3 className="text-2xl font-bold mb-4 text-sky-100">Sistem Administrasi Modern</h3>
             <p className="text-sky-200 leading-relaxed mb-6">
-              Portal digital terpadu untuk pengurus RT 001 / RW 005. Kelola data warga, pantau riwayat pengajuan surat, dan verifikasi dokumen dengan tanda tangan elektronik QR Code secara real-time.
+              Portal digital terpadu untuk pengurus RT 17 / RW 02. Kelola data warga, pantau riwayat pengajuan surat, dan verifikasi dokumen dengan tanda tangan elektronik QR Code secara real-time.
             </p>
             <div className="bg-white/10 backdrop-blur-sm border border-white/20 p-4 rounded-lg inline-block">
               <p className="text-sm text-sky-100">Akses cepat, transparan, dan akuntabel.</p>
@@ -111,34 +117,38 @@ export default function AdminLogin() {
         </div>
       </div>
 
-      {/* MODAL POP-UP NOTIFIKASI LOGIN BERHASIL */}
-      {showSuccess && (
+      {/* MODAL POP-UP NOTIFIKASI LOGIN */}
+      {modalStatus && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
           <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full text-center transform transition-all duration-300 scale-100">
-            {/* Logo Centang Hijau */}
-            <div className="w-20 h-20 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-6">
-              <svg className="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
             
-            <h3 className="text-2xl font-bold text-gray-800 mb-2">Login Berhasil!</h3>
-            <p className="text-gray-500 mb-8">Selamat datang kembali, Anda akan diarahkan ke dashboard dalam 2 detik...</p>
+            {modalStatus === "success" ? (
+              <>
+                {/* Logo Centang Hijau */}
+                <div className="w-20 h-20 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-6">
+                  <svg className="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-bold text-gray-800 mb-2">Login Berhasil!</h3>
+                <p className="text-gray-500 mb-8">Selamat datang kembali, Anda akan diarahkan ke dashboard dalam 2 detik...</p>
+              </>
+            ) : (
+              <>
+                {/* Logo Silang Merah */}
+                <div className="w-20 h-20 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-6">
+                  <svg className="w-12 h-12 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-bold text-gray-800 mb-2">Login Gagal!</h3>
+                <p className="text-gray-500 mb-8">Username atau password yang Anda masukkan salah. Silakan coba lagi.</p>
+              </>
+            )}
             
-            <div className="w-full bg-gray-100 rounded-full h-1.5">
-              <div className="bg-green-500 h-1.5 rounded-full animate-[loading_2s_ease-in-out]"></div>
-            </div>
           </div>
         </div>
       )}
-
-      {/* CSS ANIMATION UNTUK LOADING BAR */}
-      <style jsx>{`
-        @keyframes loading {
-          from { width: 0%; }
-          to { width: 100%; }
-        }
-      `}</style>
 
     </div>
   );
