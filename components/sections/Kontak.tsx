@@ -41,10 +41,10 @@ export default function Kontak() {
           </div>
         </div>
 
-        {/* Google Maps Embed */}
+        {/* Google Maps Embed Banjarmasin */}
         <div className="rounded-2xl overflow-hidden shadow-lg border border-gray-100 h-[400px] md:h-full min-h-[400px]">
           <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.7745891594427!2d107.6088353147723!3d-6.917464995012932!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e64b5b5b5b5b%3A0x5b5b5b5b5b5b5b5b!2sBandung%2C%20West%20Java!5e0!3m2!1sen!2sid!4v1644333333333" 
+            src="https://maps.google.com/maps?q=Basirih%20Selatan,%20Banjarmasin%20Selatan&t=&z=14&ie=UTF8&iwloc=&output=embed" 
             width="100%" 
             height="100%" 
             style={{ border: 0 }} 
