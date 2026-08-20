@@ -131,7 +131,7 @@ export default function AdminLogin() {
                   </svg>
                 </div>
                 <h3 className="text-2xl font-bold text-gray-800 mb-2">Login Berhasil!</h3>
-                <p className="text-gray-500 mb-8">Selamat datang kembali, Anda akan diarahkan ke dashboard dalam 2 detik...</p>
+                <p className="text-gray-500 mb-8">Selamat datang kembali di aplikasi SiWarga</p>
               </>
             ) : (
               <>
