@@ -48,9 +48,8 @@ body {
     left: 0;
     top: 0;
     width: 210mm;
-    padding: 0 !important;
-    margin: 0 !important;
     box-shadow: none !important;
+    /* JANGAN ADA padding: 0 di sini, biarkan SuratFormat.tsx yang atur padding */
   }
   .no-print, .print\:hidden {
     display: none !important;

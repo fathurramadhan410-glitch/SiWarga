@@ -34,20 +34,21 @@ export default function SuratFormat({ jenis, data, keperluan, nomorSurat }: Sura
     weekday: "long", day: "numeric", month: "long", year: "numeric",
   });
 
-  // Margin standar 2cm (20mm) ke semua sisi. Tanpa height/maxHeight agar teks tidak terpotong.
   const gayaSurat: React.CSSProperties = {
     fontFamily: '"Times New Roman", Times, serif',
     fontSize: "12pt",
     lineHeight: 1.5,
     color: "#000",
     width: "210mm",
-    minHeight: "297mm",
-    padding: "20mm", 
+    minHeight: "297mm", // Hanya minimal tinggi, tidak memaksa height agar teks tidak terpotong
+    padding: "25mm", // Margin 2.5cm ke semua sisi (Standar dokumen resmi)
     backgroundColor: "white",
     margin: "0 auto",
     boxShadow: "0 0 10px rgba(0,0,0,0.1)",
     textAlign: "justify",
     boxSizing: "border-box",
+    display: "flex",
+    flexDirection: "column",
   };
 
   const tabelData = (
@@ -107,8 +108,8 @@ export default function SuratFormat({ jenis, data, keperluan, nomorSurat }: Sura
         <p style={{ margin: "5px 0 0 0" }}>Nomor: {nomorSurat}</p>
       </div>
 
-      {/* ISI SURAT (Mengalir Natural Tanpa Flex) */}
-      <div>
+      {/* ISI SURAT */}
+      <div style={{ flex: 1 }}>
         <p>Yang bertanda tangan di bawah ini, Ketua RT {RT_CONFIG.rt} / RW {RT_CONFIG.rw} Kelurahan {RT_CONFIG.kelurahan}, Kecamatan {RT_CONFIG.kecamatan}, {RT_CONFIG.kota}, dengan ini menerangkan bahwa:</p>
         {tabelData}
         {renderIsiSurat()}
@@ -116,7 +117,7 @@ export default function SuratFormat({ jenis, data, keperluan, nomorSurat }: Sura
       </div>
 
       {/* TTD & QR CODE */}
-      <div style={{ width: "280px", marginLeft: "auto", textAlign: "center", marginTop: "40px" }}>
+      <div style={{ width: "280px", marginLeft: "auto", textAlign: "center", marginTop: "30px" }}>
         <p style={{ marginBottom: "5px" }}>{RT_CONFIG.kota}, {hariIni}</p>
         <p style={{ marginBottom: "10px" }}>Ketua RT {RT_CONFIG.rt} / RW {RT_CONFIG.rw}</p>
         <div style={{ margin: "0 auto 5px auto", width: "80px", border: "1px solid #000", padding: "5px" }}>
