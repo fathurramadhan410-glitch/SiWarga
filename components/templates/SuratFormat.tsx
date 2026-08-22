@@ -9,10 +9,11 @@ const RT_CONFIG = {
   alamatKantor: "Jl. Tembus Mantuil, Basirih No. 51, Kec. Banjarmasin Selatan, Kota Banjarmasin 70246",
   rt: "17",
   rw: "02",
-  namaKetuaRT: "Fathur Ramadhan, S.Tr.Kom.",
+  namaKetuaRT: "Zalkini, S.Sos",
 };
 
 interface SuratProps {
+  id?: string; // Tambahan untuk ID verifikasi QR Code
   jenis: string;
   data: {
     nama: string;
@@ -30,7 +31,7 @@ interface SuratProps {
   isCopy?: boolean;
 }
 
-export default function SuratFormat({ jenis, data, keperluan, nomorSurat, isCopy = false }: SuratProps) {
+export default function SuratFormat({ id, jenis, data, keperluan, nomorSurat, isCopy = false }: SuratProps) {
   const hariIni = new Date().toLocaleDateString("id-ID", {
     weekday: "long", day: "numeric", month: "long", year: "numeric",
   });
@@ -41,9 +42,9 @@ export default function SuratFormat({ jenis, data, keperluan, nomorSurat, isCopy
     lineHeight: 1.5,
     color: "#000",
     width: "210mm",
-    height: "297mm", // Tinggi dikunci pas 1 halaman A4
+    height: "297mm",
     maxHeight: "297mm",
-    padding: "20mm", // Margin 2cm ke semua sisi
+    padding: "20mm",
     backgroundColor: "white",
     margin: "0 auto",
     boxShadow: "0 0 10px rgba(0,0,0,0.1)",
@@ -52,7 +53,7 @@ export default function SuratFormat({ jenis, data, keperluan, nomorSurat, isCopy
     display: "flex",
     flexDirection: "column",
     position: "relative",
-    overflow: "hidden", // Memotong konten jika melebihi 1 halaman
+    overflow: "hidden",
   };
 
   const tabelData = (
@@ -138,7 +139,7 @@ export default function SuratFormat({ jenis, data, keperluan, nomorSurat, isCopy
           <p style={{ marginBottom: "10px" }}>Ketua RT {RT_CONFIG.rt} / RW {RT_CONFIG.rw}</p>
           <div style={{ margin: "0 auto 5px auto", width: "80px", border: "1px solid #000", padding: "5px" }}>
             <QRCodeCanvas 
-              value={`https://siwarga.vercel.app/verify/${nomorSurat}`} 
+              value={`https://siwarga.vercel.app/verify/${id}`} 
               size={80} 
               level="H"
               includeMargin={false}

@@ -194,6 +194,7 @@ export default function PengajuanSurat() {
         <div className="hidden print:block">
           <div id="print-area">
             <SuratFormat 
+              id={suratSelesai.id}
               jenis={suratSelesai.jenis_surat} 
               data={{ 
                 nama: suratSelesai.nama, 
