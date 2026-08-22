@@ -15,7 +15,6 @@ export default function VerifySurat() {
     if (!id) return;
     
     async function fetchData() {
-      // Ambil data surat dari database berdasarkan ID di URL
       const { data } = await supabase
         .from('pengajuan_surat')
         .select('*')
@@ -29,7 +28,6 @@ export default function VerifySurat() {
     fetchData();
   }, [id]);
 
-  // Tampilan Loading
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -41,7 +39,6 @@ export default function VerifySurat() {
     );
   }
   
-  // Tampilan jika surat tidak ditemukan di database
   if (!surat) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-red-50 p-4">
@@ -56,10 +53,8 @@ export default function VerifySurat() {
     );
   }
 
-  // Tampilan jika surat ditemukan dan sah
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header Verifikasi */}
       <div className="bg-green-50 border-b border-green-200 py-8">
         <div className="max-w-4xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-4">
@@ -77,7 +72,6 @@ export default function VerifySurat() {
         </div>
       </div>
 
-      {/* Rincian Data Surat */}
       <div className="max-w-4xl mx-auto p-4 -mt-4">
         <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 mb-6 no-print">
           <h2 className="text-lg font-bold text-gray-800 border-b pb-2 mb-4">Rincian Verifikasi Surat</h2>
@@ -91,7 +85,6 @@ export default function VerifySurat() {
 
         <p className="text-center text-gray-400 text-sm mb-4 no-print">Pratinjau Dokumen Asli di bawah ini:</p>
         
-        {/* Pratinjau Format Surat A4 */}
         <div id="print-area">
           <SuratFormat 
             id={surat.id}
