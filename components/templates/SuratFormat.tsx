@@ -41,8 +41,9 @@ export default function SuratFormat({ jenis, data, keperluan, nomorSurat, isCopy
     lineHeight: 1.5,
     color: "#000",
     width: "210mm",
-    minHeight: "297mm",
-    padding: "25mm",
+    height: "297mm", // Tinggi dikunci pas 1 halaman A4
+    maxHeight: "297mm",
+    padding: "20mm", // Margin 2cm ke semua sisi
     backgroundColor: "white",
     margin: "0 auto",
     boxShadow: "0 0 10px rgba(0,0,0,0.1)",
@@ -51,7 +52,7 @@ export default function SuratFormat({ jenis, data, keperluan, nomorSurat, isCopy
     display: "flex",
     flexDirection: "column",
     position: "relative",
-    overflow: "hidden",
+    overflow: "hidden", // Memotong konten jika melebihi 1 halaman
   };
 
   const tabelData = (
@@ -149,7 +150,7 @@ export default function SuratFormat({ jenis, data, keperluan, nomorSurat, isCopy
         </div>
 
         {/* TEMBUSAN (Tok-tokan) */}
-        <div style={{ marginTop: "30px", fontSize: "10pt" }}>
+        <div style={{ marginTop: "20px", fontSize: "10pt" }}>
           <p style={{ fontWeight: "bold", marginBottom: "5px", textDecoration: "underline" }}>Tembusan:</p>
           <p style={{ margin: 0 }}>1. Lurah {RT_CONFIG.kelurahan}</p>
           <p style={{ margin: 0 }}>2. Arsip Ketua RT {RT_CONFIG.rt} / RW {RT_CONFIG.rw}</p>
