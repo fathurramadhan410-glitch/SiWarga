@@ -26,6 +26,18 @@ body {
 }
 
 @media print {
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 100%;
+    overflow: hidden;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
   body * {
     visibility: hidden;
   }
@@ -38,9 +50,13 @@ body {
     top: 0;
     width: 210mm;
     height: 297mm;
+    max-height: 297mm;
+    overflow: hidden;
     box-shadow: none;
-    padding: 0;
-    margin: 0;
+    padding: 0 !important; /* Padding diatur di dalam SuratFormat */
+    margin: 0 auto;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
   }
   .no-print, .print\:hidden {
     display: none !important;

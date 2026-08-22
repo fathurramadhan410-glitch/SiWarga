@@ -13,6 +13,7 @@ export default function PengajuanSurat() {
   const [keperluan, setKeperluan] = useState("");
   const [suratSelesai, setSuratSelesai] = useState<any>(null);
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSearch = async () => {
     setMessage(""); setWarga(null); setSearchResults([]); setSuratSelesai(null);
@@ -48,10 +49,19 @@ export default function PengajuanSurat() {
 
   const handleAjukan = async () => {
     if (!selectedSurat || !keperluan) return;
-    const nomorSurat = `${Math.floor(Math.random() * 1000)}/${selectedSurat}/RT001/V/2024`;
+    setLoading(true);
+
+    // Generate Nomor Surat Otomatis
+    const { count } = await supabase.from('pengajuan_surat').select('*', { count: 'exact', head: true }).eq('jenis_surat', selectedSurat);
+    const urutan = (count || 0) + 1;
+    const tahun = new Date().getFullYear();
+    const nomorSurat = `${urutan}/${selectedSurat}/RT17/RW02/${tahun}`;
+
     const { data } = await supabase.from('pengajuan_surat').insert([
       { nik: warga.nik, nama: warga.nama, jenis_surat: selectedSurat, keperluan: keperluan, desil_pemohon: warga.desil, status: 'Selesai', nomor_surat: nomorSurat }
     ]).select().single();
+
+    setLoading(false);
 
     if (data) {
       setSuratSelesai(data);
@@ -61,7 +71,6 @@ export default function PengajuanSurat() {
 
   return (
     <div className="w-full">
-      {/* BAGIAN APLIKASI (Hilang saat print) */}
       <section id="pengajuan" className="py-20 bg-white px-6 no-print print:hidden">
         <div className="max-w-3xl mx-auto bg-white p-8 md:p-10 rounded-2xl shadow-lg border border-gray-100">
           <h2 className="text-3xl font-extrabold mb-2 text-sky-800 text-center">Pengajuan Surat Mandiri</h2>
@@ -82,7 +91,7 @@ export default function PengajuanSurat() {
                   {searchResults.map((w) => (
                     <button key={w.id} onClick={() => selectWarga(w)} className="w-full text-left bg-white p-3 rounded-lg border hover:bg-sky-100 transition-colors">
                       <p className="font-bold text-gray-800">{w.nama}</p>
-                      <p className="text-xs text-gray-500">NIK: {w.nik} - Alamat: {w.alamat}</p>
+                      <p className="text-xs text-gray-500">NIW: NIW-{w.nik.slice(-4)} - Alamat: {w.alamat}</p>
                     </button>
                   ))}
                 </div>
@@ -94,7 +103,7 @@ export default function PengajuanSurat() {
                   <table className="w-full text-left text-sm">
                     <tbody>
                       <tr className="border-b"><td className="px-6 py-3 font-medium text-gray-500 w-1/3">Nama Lengkap</td><td className="px-6 py-3 text-gray-900 font-semibold">{warga.nama}</td></tr>
-                      <tr className="border-b"><td className="px-6 py-3 font-medium text-gray-500">NIK</td><td className="px-6 py-3 text-gray-900 font-mono">{warga.nik}</td></tr>
+                      <tr className="border-b"><td className="px-6 py-3 font-medium text-gray-500">NIW</td><td className="px-6 py-3 text-gray-900 font-mono">NIW-{warga.nik.slice(-4)}</td></tr>
                       <tr className="border-b"><td className="px-6 py-3 font-medium text-gray-500">Alamat</td><td className="px-6 py-3 text-gray-900">{warga.alamat}</td></tr>
                       <tr className="border-b"><td className="px-6 py-3 font-medium text-gray-500">Pekerjaan</td><td className="px-6 py-3 text-gray-900">{warga.pekerjaan}</td></tr>
                       <tr><td className="px-6 py-3 font-medium text-gray-500">Klasifikasi Desil</td><td className="px-6 py-3"><span className="bg-sky-100 text-sky-800 px-2 py-1 rounded font-bold">Desil {warga.desil}</span></td></tr>
@@ -122,14 +131,15 @@ export default function PengajuanSurat() {
                   </div>
                   <div className="flex gap-3">
                     <button onClick={() => setShowForm(false)} className="flex-1 border border-gray-300 text-gray-700 px-4 py-3 rounded-lg font-medium hover:bg-gray-50">Batal</button>
-                    <button onClick={handleAjukan} disabled={!selectedSurat || !keperluan} className="flex-1 bg-sky-700 text-white px-4 py-3 rounded-lg font-semibold hover:bg-sky-800 disabled:opacity-50">Buat Surat</button>
+                    <button onClick={handleAjukan} disabled={!selectedSurat || !keperluan || loading} className="flex-1 bg-sky-700 text-white px-4 py-3 rounded-lg font-semibold hover:bg-sky-800 disabled:opacity-50">
+                      {loading ? "Memproses..." : "Buat Surat"}
+                    </button>
                   </div>
                 </div>
               )}
             </>
           )}
 
-          {/* SURAT SELESAI (MODAL PREVIEW DI LAYAR) */}
           {suratSelesai && warga && (
             <div className="bg-green-50 p-8 rounded-xl border border-green-200 text-center">
               <div className="w-16 h-16 bg-green-500 rounded-full mx-auto mb-4 flex items-center justify-center text-white text-3xl">✓</div>
@@ -147,7 +157,7 @@ export default function PengajuanSurat() {
         </div>
       </section>
 
-      {/* AREA CETAK SURAT A4 (Hanya muncul saat print, tanpa gangguan background) */}
+      {/* AREA CETAK SURAT A4 (Hanya muncul saat print) */}
       {suratSelesai && warga && (
         <div className="hidden print:block">
           <div id="print-area">
