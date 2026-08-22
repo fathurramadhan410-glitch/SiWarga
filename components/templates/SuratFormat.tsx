@@ -153,14 +153,16 @@ export default function SuratFormat({ jenis, data, keperluan, nomorSurat, isCopy
         <div style={{ width: "280px", marginLeft: "auto", textAlign: "center", marginTop: "30px" }}>
           <p style={{ marginBottom: "5px" }}>{RT_CONFIG.kota}, {hariIni}</p>
           <p style={{ marginBottom: "10px" }}>Ketua RT {RT_CONFIG.rt} / RW {RT_CONFIG.rw}</p>
-          <div style={{ margin: "0 auto 5px auto", width: "80px", border: "1px solid #000", padding: "5px" }}>
-            <QRCodeCanvas 
-              value={teksVerifikasiQR} 
-              size={80} 
-              level="H"
-              includeMargin={false}
-            />
-          </div>
+                  <div style={{ margin: "0 auto 5px auto", width: "150px", padding: "10px", backgroundColor: "#ffffff" }}>
+          <QRCodeCanvas 
+            value={teksVerifikasiQR} 
+            size={150} 
+            level="M"
+            marginSize={4}
+            bgColor="#ffffff"
+            fgColor="#000000"
+          />
+        </div>
           <p style={{ fontWeight: "bold", textDecoration: "underline" }}>
             {ketuaRT}
           </p>
