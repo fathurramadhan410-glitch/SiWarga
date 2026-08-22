@@ -43,17 +43,44 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
       {children}
       {notif.isOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm no-print">
-          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full text-center transform transition-all duration-300 scale-100">
-            <div className={`w-20 h-20 mx-auto ${colors[notif.status].bg} rounded-full flex items-center justify-center mb-6`}>
+          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full text-center animate-[popIn_0.3s_ease-out_forwards]">
+            
+            {/* Lingkaran Latar Ikon */}
+            <div className={`w-20 h-20 mx-auto ${colors[notif.status].bg} rounded-full flex items-center justify-center mb-6 animate-[scaleIn_0.3s_ease-out_forwards]`}>
+              {/* Ikon SVG dengan Animasi Menggambar */}
               <svg className={`w-12 h-12 ${colors[notif.status].text}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d={colors[notif.status].path} />
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth="3" 
+                  d={colors[notif.status].path} 
+                  className="animate-[drawIcon_0.4s_ease-in-out_0.2s_forwards]"
+                  style={{ strokeDasharray: 100, strokeDashoffset: 100 }}
+                />
               </svg>
             </div>
+
             <h3 className="text-2xl font-bold text-gray-800 mb-2">{notif.title}</h3>
             <p className="text-gray-500 mb-8">{notif.message}</p>
           </div>
         </div>
       )}
+
+      {/* CSS ANIMATION UNTUK EFEK GERAK IKON */}
+      <style jsx>{`
+        @keyframes popIn {
+          0% { transform: scale(0.8); opacity: 0; }
+          60% { transform: scale(1.05); }
+          100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes scaleIn {
+          0% { transform: scale(0); }
+          100% { transform: scale(1); }
+        }
+        @keyframes drawIcon {
+          to { stroke-dashoffset: 0; }
+        }
+      `}</style>
     </NotificationContext.Provider>
   );
 }
