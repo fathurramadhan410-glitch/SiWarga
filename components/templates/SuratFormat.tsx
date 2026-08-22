@@ -9,7 +9,7 @@ const RT_CONFIG = {
   alamatKantor: "Jl. Tembus Mantuil, Basirih No. 51, Kec. Banjarmasin Selatan, Kota Banjarmasin 70246",
   rt: "17",
   rw: "02",
-  namaKetuaRT: "Zalkini, S.Sos",
+  namaKetuaRT: "Fathur Ramadhan, S.Tr.Kom.",
 };
 
 interface SuratProps {
