@@ -90,15 +90,17 @@ export default function PengajuanSurat() {
           nomor_surat: nomorSurat 
         }
       ])
-      .select() // Ini penting agar mengembalikan data yang baru di-insert
-      .single(); // Mengambil 1 baris data saja
+      .select() // Ini penting agar mengembalikan data yang baru di-insert beserta ID-nya
+      .single(); 
 
     setLoading(false);
 
     if (error) {
       setMessage("Gagal membuat surat: " + error.message);
     } else if (insertedData) {
-      // Data insertedData SUDAH BERISI ID dari database
+      // Cek di Console Browser (F12) apakah ID-nya berhasil diambil
+      console.log("ID Surat yang baru dibuat:", insertedData.id);
+      
       setSuratSelesai(insertedData);
       setShowForm(false);
     }
@@ -197,7 +199,7 @@ export default function PengajuanSurat() {
         <div className="hidden print:block">
           <div id="print-area">
             <SuratFormat 
-              id={suratSelesai.id} // ID ini sudah dijamin terisi
+              id={suratSelesai.id} 
               jenis={suratSelesai.jenis_surat} 
               data={{ 
                 nama: suratSelesai.nama, 
