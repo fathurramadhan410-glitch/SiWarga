@@ -2,7 +2,6 @@
 import React from "react";
 import { QRCodeCanvas } from "qrcode.react";
 
-// KONFIGURASI RT (Bisa diubah sesuai data asli)
 const RT_CONFIG = {
   kota: "Kota Banjarmasin",
   kecamatan: "Banjarmasin Selatan",
@@ -10,7 +9,7 @@ const RT_CONFIG = {
   alamatKantor: "Jl. Tembus Mantuil, Basirih No. 51, Kec. Banjarmasin Selatan, Kota Banjarmasin 70246",
   rt: "17",
   rw: "02",
-  namaKetuaRT: "Zalkini, S.Sos", // Sesuaikan dengan nama di surat Anda
+  namaKetuaRT: "Zalkini, S.Sos",
 };
 
 interface SuratProps {
@@ -35,21 +34,20 @@ export default function SuratFormat({ jenis, data, keperluan, nomorSurat }: Sura
     weekday: "long", day: "numeric", month: "long", year: "numeric",
   });
 
+  // Margin standar 2cm (20mm) ke semua sisi. Tanpa height/maxHeight agar teks tidak terpotong.
   const gayaSurat: React.CSSProperties = {
     fontFamily: '"Times New Roman", Times, serif',
     fontSize: "12pt",
     lineHeight: 1.5,
     color: "#000",
     width: "210mm",
-    minHeight: "297mm", // Minimal 1 halaman A4
-    padding: "25mm", // Margin 2.5cm ke semua sisi (atas, bawah, kiri, kanan)
+    minHeight: "297mm",
+    padding: "20mm", 
     backgroundColor: "white",
     margin: "0 auto",
     boxShadow: "0 0 10px rgba(0,0,0,0.1)",
     textAlign: "justify",
     boxSizing: "border-box",
-    display: "flex",
-    flexDirection: "column",
   };
 
   const tabelData = (
@@ -109,8 +107,8 @@ export default function SuratFormat({ jenis, data, keperluan, nomorSurat }: Sura
         <p style={{ margin: "5px 0 0 0" }}>Nomor: {nomorSurat}</p>
       </div>
 
-      {/* BUNGKUS ISI SURAT */}
-      <div style={{ flex: 1 }}>
+      {/* ISI SURAT (Mengalir Natural Tanpa Flex) */}
+      <div>
         <p>Yang bertanda tangan di bawah ini, Ketua RT {RT_CONFIG.rt} / RW {RT_CONFIG.rw} Kelurahan {RT_CONFIG.kelurahan}, Kecamatan {RT_CONFIG.kecamatan}, {RT_CONFIG.kota}, dengan ini menerangkan bahwa:</p>
         {tabelData}
         {renderIsiSurat()}
@@ -118,7 +116,7 @@ export default function SuratFormat({ jenis, data, keperluan, nomorSurat }: Sura
       </div>
 
       {/* TTD & QR CODE */}
-      <div style={{ width: "280px", marginLeft: "auto", textAlign: "center", marginTop: "30px" }}>
+      <div style={{ width: "280px", marginLeft: "auto", textAlign: "center", marginTop: "40px" }}>
         <p style={{ marginBottom: "5px" }}>{RT_CONFIG.kota}, {hariIni}</p>
         <p style={{ marginBottom: "10px" }}>Ketua RT {RT_CONFIG.rt} / RW {RT_CONFIG.rw}</p>
         <div style={{ margin: "0 auto 5px auto", width: "80px", border: "1px solid #000", padding: "5px" }}>
