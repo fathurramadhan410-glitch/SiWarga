@@ -51,20 +51,52 @@ export default function PengajuanSurat() {
     if (!selectedSurat || !keperluan) return;
     setLoading(true);
 
-    // Generate Nomor Surat Otomatis
-    const { count } = await supabase.from('pengajuan_surat').select('*', { count: 'exact', head: true }).eq('jenis_surat', selectedSurat);
-    const urutan = (count || 0) + 1;
+    // 1. Ambil nomor urut terbesar
+    const { data: lastSuratData } = await supabase
+      .from('pengajuan_surat')
+      .select('nomor_surat')
+      .eq('jenis_surat', selectedSurat)
+      .order('created_at', { ascending: false })
+      .limit(1);
+
+    let urutan = 1;
+    if (lastSuratData && lastSuratData.length > 0) {
+      const lastNomor = lastSuratData[0].nomor_surat;
+      const lastNum = parseInt(lastNomor.split('/')[0]);
+      if (!isNaN(lastNum)) {
+        urutan = lastNum + 1;
+      }
+    }
+
     const tahun = new Date().getFullYear();
     const nomorSurat = `${urutan}/${selectedSurat}/RT17/RW02/${tahun}`;
 
+    // 2. Simpan surat beserta SNAPSHOT DATA WARGA ke dalam arsip
     const { data } = await supabase.from('pengajuan_surat').insert([
-      { nik: warga.nik, nama: warga.nama, jenis_surat: selectedSurat, keperluan: keperluan, desil_pemohon: warga.desil, status: 'Selesai', nomor_surat: nomorSurat }
+      { 
+        nik: warga.nik, 
+        nama: warga.nama,
+        alamat: warga.alamat, 
+        pekerjaan: warga.pekerjaan,
+        tempat_lahir: warga.tempat_lahir,
+        tanggal_lahir: warga.tanggal_lahir,
+        jenis_kelamin: warga.jenis_kelamin,
+        jenis_surat: selectedSurat, 
+        keperluan: keperluan, 
+        desil_pemohon: warga.desil, 
+        status: 'Selesai', 
+        nomor_surat: nomorSurat 
+      }
     ]).select().single();
 
     setLoading(false);
 
     if (data) {
-      setSuratSelesai(data);
+      // Gabungkan data warga ke dalam object suratSelesai agar bisa dicetak ulang tanpa tabel warga
+      setSuratSelesai({
+        ...data,
+        warga: warga
+      });
       setShowForm(false);
     }
   };
@@ -140,7 +172,7 @@ export default function PengajuanSurat() {
             </>
           )}
 
-          {suratSelesai && warga && (
+          {suratSelesai && (
             <div className="bg-green-50 p-8 rounded-xl border border-green-200 text-center">
               <div className="w-16 h-16 bg-green-500 rounded-full mx-auto mb-4 flex items-center justify-center text-white text-3xl">✓</div>
               <h3 className="text-2xl font-bold text-green-800 mb-2">Surat Berhasil Dibuat!</h3>
@@ -157,20 +189,20 @@ export default function PengajuanSurat() {
         </div>
       </section>
 
-      {/* AREA CETAK SURAT A4 (Hanya muncul saat print) */}
-      {suratSelesai && warga && (
+      {/* AREA CETAK SURAT A4 (Mengambil data dari suratSelesai yang sudah disnapshot) */}
+      {suratSelesai && (
         <div className="hidden print:block">
           <div id="print-area">
             <SuratFormat 
               jenis={suratSelesai.jenis_surat} 
               data={{ 
-                nama: warga.nama, 
-                nik: warga.nik, 
-                alamat: warga.alamat, 
-                pekerjaan: warga.pekerjaan,
-                tempatLahir: warga.tempat_lahir,
-                tanggalLahir: warga.tanggal_lahir ? new Date(warga.tanggal_lahir).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : "-",
-                jenisKelamin: warga.jenis_kelamin
+                nama: suratSelesai.nama, 
+                nik: suratSelesai.nik, 
+                alamat: suratSelesai.alamat, 
+                pekerjaan: suratSelesai.pekerjaan,
+                tempatLahir: suratSelesai.tempat_lahir,
+                tanggalLahir: suratSelesai.tanggal_lahir ? new Date(suratSelesai.tanggal_lahir).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : "-",
+                jenisKelamin: suratSelesai.jenis_kelamin
               }} 
               keperluan={suratSelesai.keperluan} 
               nomorSurat={suratSelesai.nomor_surat} 

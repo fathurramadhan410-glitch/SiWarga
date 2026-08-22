@@ -21,12 +21,18 @@ export default function AdminDataWarga() {
 
   const confirmDelete = async () => {
     if (!deleteData) return;
+    
+    // 1. Hapus Riwayat Pengajuan Surat Warga Ini (Agar sinkron & dashboard bersih)
+    await supabaseAdmin.from('pengajuan_surat').delete().eq('nik', deleteData.nik);
+    
+    // 2. Hapus Data Warga
     const { error } = await supabaseAdmin.from('warga').delete().eq('id', deleteData.id);
+    
     setDeleteData(null);
     if (error) {
       showNotif("error", "Gagal Menghapus!", "Terjadi kesalahan saat menghapus data.");
     } else {
-      showNotif("success", "Data Berhasil Dihapus!", "Data warga telah dihapus dari sistem.");
+      showNotif("success", "Data Berhasil Dihapus!", "Data warga beserta riwayat suratnya telah dihapus bersih.");
       fetchData();
     }
   };
@@ -108,7 +114,7 @@ export default function AdminDataWarga() {
               <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
             </div>
             <h3 className="text-xl font-bold text-gray-800 mb-2">Apakah Anda yakin?</h3>
-            <p className="text-gray-500 mb-6">Data warga atas nama <strong>{deleteData.nama}</strong> akan dihapus permanen.</p>
+            <p className="text-gray-500 mb-6">Data warga atas nama <strong>{deleteData.nama}</strong> beserta seluruh riwayat pengajuan suratnya akan dihapus permanen.</p>
             <div className="flex gap-3">
               <button onClick={() => setDeleteData(null)} className="flex-1 border border-gray-300 text-gray-700 py-2 rounded-lg font-medium hover:bg-gray-50">Batal</button>
               <button onClick={confirmDelete} className="flex-1 bg-red-600 text-white py-2 rounded-lg font-semibold hover:bg-red-700">Hapus</button>

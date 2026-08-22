@@ -1,22 +1,37 @@
 "use client";
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase/client";
+import { supabaseAdmin } from "@/lib/supabase/client";
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState({ totalWarga: 0, wargaMiskin: 0, totalPengajuan: 0, pengajuanSelesai: 0 });
 
   useEffect(() => {
     async function fetchStats() {
-      const { count: totalWarga } = await supabase.from('warga').select('*', { count: 'exact', head: true });
-      const { count: wargaMiskin } = await supabase.from('warga').select('*', { count: 'exact', head: true }).lte('desil', 3);
-      const { count: totalPengajuan } = await supabase.from('pengajuan_surat').select('*', { count: 'exact', head: true });
-      const { count: pengajuanSelesai } = await supabase.from('pengajuan_surat').select('*', { count: 'exact', head: true }).eq('status', 'Selesai');
+      // 1. Ambil semua NIK warga yang masih aktif
+      const { data: wargaData } = await supabaseAdmin.from('warga').select('nik');
+      const activeNiks = wargaData ? wargaData.map(w => w.nik) : [];
       
+      // 2. Hitung total warga & warga miskin
+      const { count: totalWarga } = await supabaseAdmin.from('warga').select('*', { count: 'exact', head: true });
+      const { count: wargaMiskin } = await supabaseAdmin.from('warga').select('*', { count: 'exact', head: true }).lte('desil', 3);
+      
+      let totalPengajuan = 0;
+      let pengajuanSelesai = 0;
+
+      // 3. Hitung pengajuan HANYA dari warga yang aktif
+      if (activeNiks.length > 0) {
+        const { count: pCount } = await supabaseAdmin.from('pengajuan_surat').select('*', { count: 'exact', head: true }).in('nik', activeNiks);
+        totalPengajuan = pCount || 0;
+        
+        const { count: sCount } = await supabaseAdmin.from('pengajuan_surat').select('*', { count: 'exact', head: true }).eq('status', 'Selesai').in('nik', activeNiks);
+        pengajuanSelesai = sCount || 0;
+      }
+
       setStats({
         totalWarga: totalWarga || 0,
         wargaMiskin: wargaMiskin || 0,
-        totalPengajuan: totalPengajuan || 0,
-        pengajuanSelesai: pengajuanSelesai || 0,
+        totalPengajuan,
+        pengajuanSelesai,
       });
     }
     fetchStats();
