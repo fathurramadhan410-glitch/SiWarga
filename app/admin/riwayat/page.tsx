@@ -9,8 +9,17 @@ export default function RiwayatPengajuan() {
 
   useEffect(() => {
     async function fetchData() {
-      const { data } = await supabaseAdmin.from('pengajuan_surat').select('*').order('tanggal_pengajuan', { ascending: false });
-      if (data) setRiwayat(data);
+      // Ambil semua pengajuan surat
+      const { data: pengajuanData } = await supabaseAdmin.from('pengajuan_surat').select('*').order('tanggal_pengajuan', { ascending: false });
+      // Ambil semua NIK warga yang masih ada di database
+      const { data: wargaData } = await supabaseAdmin.from('warga').select('nik');
+      
+      if (pengajuanData && wargaData) {
+        const activeNiks = wargaData.map(w => w.nik);
+        // Filter: hanya tampilkan riwayat yang NIK-nya masih ada di tabel warga
+        const validRiwayat = pengajuanData.filter(p => activeNiks.includes(p.nik));
+        setRiwayat(validRiwayat);
+      }
     }
     fetchData();
   }, []);
@@ -20,22 +29,21 @@ export default function RiwayatPengajuan() {
     if (warga) {
       setPrintData({ surat, warga });
     } else {
-      alert("Data warga untuk NIK ini tidak ditemukan di database!");
+      alert("Data warga tidak ditemukan!");
     }
   };
 
   return (
     <div>
-      {/* BAGIAN APLIKASI (Hilang saat print) */}
       <div className="no-print print:hidden">
         <h1 className="text-3xl font-bold text-gray-800 mb-2">Riwayat Pengajuan Surat</h1>
-        <p className="text-gray-500 mb-8">Daftar surat yang telah diajukan oleh warga secara mandiri.</p>
+        <p className="text-gray-500 mb-8">Daftar surat yang telah diajukan oleh warga aktif.</p>
 
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-x-auto">
           <table className="min-w-full text-left text-sm">
             <thead className="bg-sky-800 text-white">
               <tr>
-                <th className="p-3 rounded-l-lg">NIW (NIK)</th>
+                <th className="p-3 rounded-l-lg">NIW</th>
                 <th className="p-3">Nama Warga</th>
                 <th className="p-3">Jenis Surat</th>
                 <th className="p-3">Keperluan</th>
@@ -66,7 +74,7 @@ export default function RiwayatPengajuan() {
               ))}
             </tbody>
           </table>
-          {riwayat.length === 0 && <p className="text-center py-8 text-gray-400">Belum ada riwayat pengajuan.</p>}
+          {riwayat.length === 0 && <p className="text-center py-8 text-gray-400">Belum ada riwayat pengajuan dari warga aktif.</p>}
         </div>
       </div>
 
@@ -82,7 +90,6 @@ export default function RiwayatPengajuan() {
             </div>
             
             <div className="p-4 print:hidden">
-              {/* Pratinjau di Layar dengan Data Lengkap */}
               <div id="print-area-preview">
                 <SuratFormat 
                   jenis={printData.surat.jenis_surat} 
