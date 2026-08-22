@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { supabaseAdmin } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
+import { useNotification } from "@/lib/NotificationContext";
 
 export default function TambahWarga() {
   const [form, setForm] = useState({ 
@@ -9,9 +10,9 @@ export default function TambahWarga() {
     pekerjaan: "", penghasilan: "0", tanggungan: "0", umur: "", alamat: "", telp: "", kk: "", desil: "1" 
   });
   const [loading, setLoading] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const router = useRouter();
+  const { showNotif } = useNotification(); // Panggil template notifikasi
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -34,9 +35,10 @@ export default function TambahWarga() {
     setLoading(false);
 
     if (error) {
-      setErrorMsg("Gagal menyimpan: " + error.message);
+      showNotif("error", "Gagal Menyimpan!", error.message); // Notif error otomatis
     } else {
-      setShowSuccess(true);
+      showNotif("success", "Data Berhasil Disimpan!", "Data warga baru telah masuk ke database sistem.");
+      setTimeout(() => router.push("/admin/data-warga"), 2000); // Pindah halaman setelah 2 detik
     }
   };
 
@@ -114,19 +116,6 @@ export default function TambahWarga() {
           </div>
         </form>
       </div>
-
-      {showSuccess && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full text-center">
-            <div className="w-20 h-20 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-6">
-              <svg className="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
-            </div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-2">Data Berhasil Disimpan!</h3>
-            <p className="text-gray-500 mb-8">Data warga baru telah masuk ke database sistem.</p>
-            <button onClick={() => router.push("/admin/data-warga")} className="w-full bg-sky-700 text-white py-3 rounded-lg font-semibold hover:bg-sky-800">Lihat Data Warga</button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
