@@ -57,7 +57,7 @@ export default function ArsipSurat() {
                   <td className="p-3 font-mono text-gray-700 whitespace-nowrap">{r.nomor_surat}</td>
                   <td className="p-3 font-medium text-gray-900 whitespace-nowrap">{r.nama}</td>
                   <td className="p-3 text-gray-600">{r.jenis_surat}</td>
-                  <td className="p-3 text-gray-600">Fathur Ramadhan, S.Tr.Kom.</td>
+                  <td className="p-3 text-gray-600">Zalkini, S.Sos</td>
                   <td className="p-3 text-center">
                     <button onClick={() => handleCetakSalinan(r)} className="bg-sky-600 text-white px-3 py-1.5 rounded-md text-xs font-semibold hover:bg-sky-700 inline-flex items-center gap-1">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg> Cetak Salinan (Legalisir)
@@ -85,7 +85,6 @@ export default function ArsipSurat() {
             <div className="p-4 print:hidden">
               <div id="print-area-preview">
                 <SuratFormat 
-                  id={printData.id}
                   jenis={printData.jenis_surat} 
                   data={{ 
                     nama: printData.nama, 
@@ -118,7 +117,6 @@ export default function ArsipSurat() {
         <div className="hidden print:block">
           <div id="print-area">
             <SuratFormat 
-              id={printData.id}
               jenis={printData.jenis_surat} 
               data={{ 
                 nama: printData.nama, 

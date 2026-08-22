@@ -13,7 +13,7 @@ const RT_CONFIG = {
 };
 
 interface SuratProps {
-  id?: string;
+  id?: string; // Tetap ada agar tidak error jika dipanggil
   jenis: string;
   data: {
     nama: string;
@@ -32,8 +32,8 @@ interface SuratProps {
   namaKetuaRT?: string;
 }
 
-export default function SuratFormat({ id, jenis, data, keperluan, nomorSurat, isCopy = false, namaKetuaRT }: SuratProps) {
-  const [ketuaRT, setKetuaRT] = useState(namaKetuaRT || "Zalkini, S.Sos");
+export default function SuratFormat({ jenis, data, keperluan, nomorSurat, isCopy = false, namaKetuaRT }: SuratProps) {
+  const [ketuaRT, setKetuaRT] = useState(namaKetuaRT || "Fathur Ramadhan, S.Tr.Kom.");
 
   useEffect(() => {
     if (!namaKetuaRT) {
@@ -105,6 +105,9 @@ export default function SuratFormat({ id, jenis, data, keperluan, nomorSurat, is
     }
   };
 
+  // Teks yang akan dimasukkan ke dalam QR Code
+  const teksVerifikasiQR = `DOKUMEN TERVERIFIKASI\n====================\nNama Pemohon: ${data.nama}\nNIK: ${data.nik}\nAlamat: ${data.alamat}\nJenis Surat: ${jenis}\nKeperluan: ${keperluan}\nNomor Surat: ${nomorSurat}\nDibuat & Diverifikasi oleh:\n${ketuaRT} (Ketua RT ${RT_CONFIG.rt}/RW ${RT_CONFIG.rw})\nTanggal Diterbitkan: ${hariIni}\n\n*Dokumen ini sah dikeluarkan oleh sistem SiWarga RT ${RT_CONFIG.rt}/RW ${RT_CONFIG.rw} Kel. ${RT_CONFIG.kelurahan}.`;
+
   return (
     <div id="print-area" style={gayaSurat}>
       
@@ -152,7 +155,7 @@ export default function SuratFormat({ id, jenis, data, keperluan, nomorSurat, is
           <p style={{ marginBottom: "10px" }}>Ketua RT {RT_CONFIG.rt} / RW {RT_CONFIG.rw}</p>
           <div style={{ margin: "0 auto 5px auto", width: "80px", border: "1px solid #000", padding: "5px" }}>
             <QRCodeCanvas 
-              value={`https://siwarga.vercel.app/verify?id=${id}`} 
+              value={teksVerifikasiQR} 
               size={80} 
               level="H"
               includeMargin={false}

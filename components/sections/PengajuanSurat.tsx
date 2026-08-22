@@ -71,7 +71,7 @@ export default function PengajuanSurat() {
     const tahun = new Date().getFullYear();
     const nomorSurat = `${urutan}/${selectedSurat}/RT17/RW02/${tahun}`;
 
-    // 2. Simpan surat dan TANGKAP ID BALIKANNYA SECARA LANGSUNG
+    // 2. Simpan surat beserta SNAPSHOT DATA WARGA ke dalam arsip
     const { data: insertedData, error } = await supabase
       .from('pengajuan_surat')
       .insert([
@@ -90,17 +90,14 @@ export default function PengajuanSurat() {
           nomor_surat: nomorSurat 
         }
       ])
-      .select() // Ini penting agar mengembalikan data yang baru di-insert beserta ID-nya
-      .single(); 
+      .select()
+      .single();
 
     setLoading(false);
 
     if (error) {
       setMessage("Gagal membuat surat: " + error.message);
     } else if (insertedData) {
-      // Cek di Console Browser (F12) apakah ID-nya berhasil diambil
-      console.log("ID Surat yang baru dibuat:", insertedData.id);
-      
       setSuratSelesai(insertedData);
       setShowForm(false);
     }
@@ -194,12 +191,11 @@ export default function PengajuanSurat() {
         </div>
       </section>
 
-      {/* AREA CETAK SURAT A4 (ID SEKARANG SUDAH BERISI DATA DARI DATABASE) */}
+      {/* AREA CETAK SURAT A4 */}
       {suratSelesai && (
         <div className="hidden print:block">
           <div id="print-area">
             <SuratFormat 
-              id={suratSelesai.id} 
               jenis={suratSelesai.jenis_surat} 
               data={{ 
                 nama: suratSelesai.nama, 
