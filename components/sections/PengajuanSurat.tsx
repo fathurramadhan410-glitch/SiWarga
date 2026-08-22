@@ -71,32 +71,35 @@ export default function PengajuanSurat() {
     const tahun = new Date().getFullYear();
     const nomorSurat = `${urutan}/${selectedSurat}/RT17/RW02/${tahun}`;
 
-    // 2. Simpan surat beserta SNAPSHOT DATA WARGA ke dalam arsip
-    const { data } = await supabase.from('pengajuan_surat').insert([
-      { 
-        nik: warga.nik, 
-        nama: warga.nama,
-        alamat: warga.alamat, 
-        pekerjaan: warga.pekerjaan,
-        tempat_lahir: warga.tempat_lahir,
-        tanggal_lahir: warga.tanggal_lahir,
-        jenis_kelamin: warga.jenis_kelamin,
-        jenis_surat: selectedSurat, 
-        keperluan: keperluan, 
-        desil_pemohon: warga.desil, 
-        status: 'Selesai', 
-        nomor_surat: nomorSurat 
-      }
-    ]).select().single();
+    // 2. Simpan surat dan TANGKAP ID BALIKANNYA SECARA LANGSUNG
+    const { data: insertedData, error } = await supabase
+      .from('pengajuan_surat')
+      .insert([
+        { 
+          nik: warga.nik, 
+          nama: warga.nama,
+          alamat: warga.alamat, 
+          pekerjaan: warga.pekerjaan,
+          tempat_lahir: warga.tempat_lahir,
+          tanggal_lahir: warga.tanggal_lahir,
+          jenis_kelamin: warga.jenis_kelamin,
+          jenis_surat: selectedSurat, 
+          keperluan: keperluan, 
+          desil_pemohon: warga.desil, 
+          status: 'Selesai', 
+          nomor_surat: nomorSurat 
+        }
+      ])
+      .select() // Ini penting agar mengembalikan data yang baru di-insert
+      .single(); // Mengambil 1 baris data saja
 
     setLoading(false);
 
-    if (data) {
-      // Gabungkan data warga ke dalam object suratSelesai agar bisa dicetak ulang tanpa tabel warga
-      setSuratSelesai({
-        ...data,
-        warga: warga
-      });
+    if (error) {
+      setMessage("Gagal membuat surat: " + error.message);
+    } else if (insertedData) {
+      // Data insertedData SUDAH BERISI ID dari database
+      setSuratSelesai(insertedData);
       setShowForm(false);
     }
   };
@@ -189,12 +192,12 @@ export default function PengajuanSurat() {
         </div>
       </section>
 
-      {/* AREA CETAK SURAT A4 (Mengambil data dari suratSelesai yang sudah disnapshot) */}
+      {/* AREA CETAK SURAT A4 (ID SEKARANG SUDAH BERISI DATA DARI DATABASE) */}
       {suratSelesai && (
         <div className="hidden print:block">
           <div id="print-area">
             <SuratFormat 
-              id={suratSelesai.id}
+              id={suratSelesai.id} // ID ini sudah dijamin terisi
               jenis={suratSelesai.jenis_surat} 
               data={{ 
                 nama: suratSelesai.nama, 
