@@ -138,12 +138,12 @@ export default function SuratFormat({ id, jenis, data, keperluan, nomorSurat, is
           <p style={{ marginBottom: "5px" }}>{RT_CONFIG.kota}, {hariIni}</p>
           <p style={{ marginBottom: "10px" }}>Ketua RT {RT_CONFIG.rt} / RW {RT_CONFIG.rw}</p>
           <div style={{ margin: "0 auto 5px auto", width: "80px", border: "1px solid #000", padding: "5px" }}>
-            <QRCodeCanvas 
-              value={`https://siwarga.vercel.app/verify/${id}`} 
-              size={80} 
-              level="H"
-              includeMargin={false}
-            />
+           <QRCodeCanvas 
+  value={`https://siwarga.vercel.app/verify?id=${id}`} 
+  size={80} 
+  level="H"
+  includeMargin={false}
+/>
           </div>
           <p style={{ fontWeight: "bold", textDecoration: "underline" }}>
             {RT_CONFIG.namaKetuaRT}

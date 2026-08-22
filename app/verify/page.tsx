@@ -1,18 +1,21 @@
 "use client";
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useEffect, useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase/client";
 import SuratFormat from "@/components/templates/SuratFormat";
 
-export default function VerifySurat() {
-  const params = useParams();
-  const id = params.id as string;
+function VerifikasiKonten() {
+  const searchParams = useSearchParams();
+  const id = searchParams.get('id');
   
   const [surat, setSurat] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!id) return;
+    if (!id) {
+      setLoading(false);
+      return;
+    }
     
     async function fetchData() {
       const { data } = await supabase
@@ -105,5 +108,13 @@ export default function VerifySurat() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function VerifySurat() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Memuat...</div>}>
+      <VerifikasiKonten />
+    </Suspense>
   );
 }
