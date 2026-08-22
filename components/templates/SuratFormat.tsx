@@ -1,6 +1,7 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { QRCodeCanvas } from "qrcode.react";
+import { supabase } from "@/lib/supabase/client";
 
 const RT_CONFIG = {
   kota: "Kota Banjarmasin",
@@ -9,11 +10,10 @@ const RT_CONFIG = {
   alamatKantor: "Jl. Tembus Mantuil, Basirih No. 51, Kec. Banjarmasin Selatan, Kota Banjarmasin 70246",
   rt: "17",
   rw: "02",
-  namaKetuaRT: "Fathur Ramadhan, S.Tr.Kom.",
 };
 
 interface SuratProps {
-  id?: string; // Tambahan untuk ID verifikasi QR Code
+  id?: string;
   jenis: string;
   data: {
     nama: string;
@@ -29,9 +29,22 @@ interface SuratProps {
   keperluan: string;
   nomorSurat: string;
   isCopy?: boolean;
+  namaKetuaRT?: string;
 }
 
-export default function SuratFormat({ id, jenis, data, keperluan, nomorSurat, isCopy = false }: SuratProps) {
+export default function SuratFormat({ id, jenis, data, keperluan, nomorSurat, isCopy = false, namaKetuaRT }: SuratProps) {
+  const [ketuaRT, setKetuaRT] = useState(namaKetuaRT || "Zalkini, S.Sos");
+
+  useEffect(() => {
+    if (!namaKetuaRT) {
+      const fetchSettings = async () => {
+        const { data } = await supabase.from('pengaturan').select('nama_ketua_rt').eq('id', 1).single();
+        if (data?.nama_ketua_rt) setKetuaRT(data.nama_ketua_rt);
+      };
+      fetchSettings();
+    }
+  }, [namaKetuaRT]);
+
   const hariIni = new Date().toLocaleDateString("id-ID", {
     weekday: "long", day: "numeric", month: "long", year: "numeric",
   });
@@ -138,15 +151,15 @@ export default function SuratFormat({ id, jenis, data, keperluan, nomorSurat, is
           <p style={{ marginBottom: "5px" }}>{RT_CONFIG.kota}, {hariIni}</p>
           <p style={{ marginBottom: "10px" }}>Ketua RT {RT_CONFIG.rt} / RW {RT_CONFIG.rw}</p>
           <div style={{ margin: "0 auto 5px auto", width: "80px", border: "1px solid #000", padding: "5px" }}>
-           <QRCodeCanvas 
-  value={`https://siwarga.vercel.app/verify?id=${id}`} 
-  size={80} 
-  level="H"
-  includeMargin={false}
-/>
+            <QRCodeCanvas 
+              value={`https://siwarga.vercel.app/verify?id=${id}`} 
+              size={80} 
+              level="H"
+              includeMargin={false}
+            />
           </div>
           <p style={{ fontWeight: "bold", textDecoration: "underline" }}>
-            {RT_CONFIG.namaKetuaRT}
+            {ketuaRT}
           </p>
         </div>
 

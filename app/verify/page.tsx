@@ -1,27 +1,27 @@
 "use client";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase/client";
 import SuratFormat from "@/components/templates/SuratFormat";
 
-export default function VerifySurat() {
+function VerifyContent() {
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
+  
   const [surat, setSurat] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Baca URL langsung dari browser (Cara paling dasar, tanpa hooks Next.js)
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get('id');
-
     if (!id) {
       setLoading(false);
       return;
     }
-
+    
     async function fetchData() {
       const { data } = await supabase
-        .from('pengajuan_surat')
-        .select('*')
-        .eq('id', id)
+        .from("pengajuan_surat")
+        .select("*")
+        .eq("id", id)
         .single();
         
       if (data) setSurat(data);
@@ -29,7 +29,7 @@ export default function VerifySurat() {
     }
     
     fetchData();
-  }, []);
+  }, [id]);
 
   if (loading) {
     return (
@@ -78,15 +78,26 @@ export default function VerifySurat() {
       <div className="max-w-4xl mx-auto p-4 -mt-4">
         <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 mb-6 no-print">
           <h2 className="text-lg font-bold text-gray-800 border-b pb-2 mb-4">Rincian Verifikasi Surat</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-            <div><span className="text-gray-500">Nomor Surat:</span> <br /> <span className="font-mono font-semibold text-gray-900">{surat.nomor_surat}</span></div>
-            <div><span className="text-gray-500">Nama Pemohon:</span> <br /> <span className="font-semibold text-gray-900">{surat.nama}</span></div>
-            <div><span className="text-gray-500">Tanggal Diterbitkan:</span> <br /> <span className="font-semibold text-gray-900">{new Date(surat.tanggal_pengajuan).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</span></div>
-            <div><span className="text-gray-500">Jenis Surat:</span> <br /> <span className="font-semibold text-gray-900">{surat.jenis_surat}</span></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+            <div className="space-y-3">
+              <div><span className="text-gray-500">Nomor Surat:</span> <br /> <span className="font-mono font-semibold text-gray-900">{surat.nomor_surat}</span></div>
+              <div><span className="text-gray-500">Nama Pemohon:</span> <br /> <span className="font-semibold text-gray-900">{surat.nama}</span></div>
+              <div><span className="text-gray-500">Jenis Surat:</span> <br /> <span className="font-semibold text-gray-900">{surat.jenis_surat}</span></div>
+              <div><span className="text-gray-500">Tanggal Diterbitkan:</span> <br /> <span className="font-semibold text-gray-900">{new Date(surat.tanggal_pengajuan).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</span></div>
+              <div><span className="text-gray-500">Diverifikasi & Ditandatangani oleh:</span> <br /> <span className="font-semibold text-gray-900">Zalkini, S.Sos (Ketua RT 17/RW 02)</span></div>
+            </div>
+            
+            {/* Pernyataan Resmi */}
+            <div className="bg-sky-50 border border-sky-100 rounded-lg p-4 flex flex-col justify-center">
+              <h3 className="font-bold text-sky-800 mb-2 text-center">Pernyataan Resmi</h3>
+              <p className="text-xs text-gray-600 text-justify leading-relaxed">
+                Surat dengan nomor dan data di atas adalah dokumen resmi yang sah dan terdaftar di database sistem administrasi RT 17 / RW 02 Kelurahan Basirih Selatan. Tanda tangan elektronik (QR Code) pada surat ini menjamin keaslian dokumen. Salinan digital ini berkedudukan sama dengan dokumen fisik asli.
+              </p>
+            </div>
           </div>
         </div>
 
-        <p className="text-center text-gray-400 text-sm mb-4 no-print">Pratinjau Dokumen Asli di bawah ini:</p>
+        <p className="text-center text-gray-400 text-sm mb-4 no-print">Pratinjau Dokumen Fisik Asli di bawah ini:</p>
         
         <div id="print-area">
           <SuratFormat 
@@ -108,5 +119,13 @@ export default function VerifySurat() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function VerifyPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Memuat halaman verifikasi...</div>}>
+      <VerifyContent />
+    </Suspense>
   );
 }
