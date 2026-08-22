@@ -33,8 +33,7 @@ body {
   html, body {
     margin: 0 !important;
     padding: 0 !important;
-    height: 100%;
-    overflow: hidden;
+    background-color: #ffffff !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
@@ -48,13 +47,10 @@ body {
     position: absolute;
     left: 0;
     top: 0;
-    width: 210mm;
-    height: 297mm;
-    max-height: 297mm;
-    overflow: hidden;
+    width: 100%;
     box-shadow: none;
     padding: 0 !important; /* Padding diatur di dalam SuratFormat */
-    margin: 0 auto;
+    margin: 0 !important;
     page-break-after: avoid !important;
     page-break-inside: avoid !important;
   }

@@ -41,9 +41,8 @@ export default function SuratFormat({ jenis, data, keperluan, nomorSurat }: Sura
     lineHeight: 1.5,
     color: "#000",
     width: "210mm",
-    minHeight: "297mm", // Pakai minHeight bukan height, agar teks tidak terpotong
-    maxHeight: "297mm",
-    padding: "25mm 25mm 20mm 25mm", // Margin 2.5cm (standar dokumen A4)
+    minHeight: "297mm", // Minimal 1 halaman A4
+    padding: "25mm", // Margin 2.5cm ke semua sisi (atas, bawah, kiri, kanan)
     backgroundColor: "white",
     margin: "0 auto",
     boxShadow: "0 0 10px rgba(0,0,0,0.1)",
@@ -51,7 +50,6 @@ export default function SuratFormat({ jenis, data, keperluan, nomorSurat }: Sura
     boxSizing: "border-box",
     display: "flex",
     flexDirection: "column",
-    overflow: "hidden",
   };
 
   const tabelData = (
