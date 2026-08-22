@@ -1,13 +1,9 @@
 "use client";
-import { Suspense, useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/client";
 import SuratFormat from "@/components/templates/SuratFormat";
 
-function VerifyContent() {
-  const searchParams = useSearchParams();
-  const id = searchParams.get("id");
-  
+export default function VerifyClient({ id }: { id: string }) {
   const [surat, setSurat] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -82,7 +78,7 @@ function VerifyContent() {
             <div className="space-y-3">
               <div><span className="text-gray-500">Nomor Surat:</span> <br /> <span className="font-mono font-semibold text-gray-900">{surat.nomor_surat}</span></div>
               <div><span className="text-gray-500">Nama Pemohon:</span> <br /> <span className="font-semibold text-gray-900">{surat.nama}</span></div>
-              <div><span className="text-gray-500">Jenis Surat:</span> <br /> <span className="font-semibold text-gray-900">{surat.jenis_surat}</span></div>
+              <div><span className="text-gray-500">NIK Pemohon:</span> <br /> <span className="font-mono font-semibold text-gray-900">{surat.nik}</span></div>
               <div><span className="text-gray-500">Tanggal Diterbitkan:</span> <br /> <span className="font-semibold text-gray-900">{new Date(surat.tanggal_pengajuan).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</span></div>
               <div><span className="text-gray-500">Diverifikasi & Ditandatangani oleh:</span> <br /> <span className="font-semibold text-gray-900">Zalkini, S.Sos (Ketua RT 17/RW 02)</span></div>
             </div>
@@ -119,13 +115,5 @@ function VerifyContent() {
         </div>
       </div>
     </div>
-  );
-}
-
-export default function VerifyPage() {
-  return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Memuat halaman verifikasi...</div>}>
-      <VerifyContent />
-    </Suspense>
   );
 }
