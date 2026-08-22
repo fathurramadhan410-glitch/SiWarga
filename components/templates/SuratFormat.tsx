@@ -27,9 +27,10 @@ interface SuratProps {
   };
   keperluan: string;
   nomorSurat: string;
+  isCopy?: boolean;
 }
 
-export default function SuratFormat({ jenis, data, keperluan, nomorSurat }: SuratProps) {
+export default function SuratFormat({ jenis, data, keperluan, nomorSurat, isCopy = false }: SuratProps) {
   const hariIni = new Date().toLocaleDateString("id-ID", {
     weekday: "long", day: "numeric", month: "long", year: "numeric",
   });
@@ -40,8 +41,8 @@ export default function SuratFormat({ jenis, data, keperluan, nomorSurat }: Sura
     lineHeight: 1.5,
     color: "#000",
     width: "210mm",
-    minHeight: "297mm", // Hanya minimal tinggi, tidak memaksa height agar teks tidak terpotong
-    padding: "25mm", // Margin 2.5cm ke semua sisi (Standar dokumen resmi)
+    minHeight: "297mm",
+    padding: "25mm",
     backgroundColor: "white",
     margin: "0 auto",
     boxShadow: "0 0 10px rgba(0,0,0,0.1)",
@@ -49,6 +50,8 @@ export default function SuratFormat({ jenis, data, keperluan, nomorSurat }: Sura
     boxSizing: "border-box",
     display: "flex",
     flexDirection: "column",
+    position: "relative",
+    overflow: "hidden",
   };
 
   const tabelData = (
@@ -89,48 +92,68 @@ export default function SuratFormat({ jenis, data, keperluan, nomorSurat }: Sura
 
   return (
     <div id="print-area" style={gayaSurat}>
-      {/* KOP SURAT */}
-      <div style={{ display: "flex", borderBottom: "3px double #000", paddingBottom: "10px", marginBottom: "20px", textAlign: "center" }}>
-        <div style={{ width: "80px", marginRight: "15px", display: "flex", alignItems: "center" }}>
-          <img src="/LOGO_KOTA_BANJARMASIN_PNG.png" alt="Logo Kota Banjarmasin" style={{ width: "100%", height: "80px", objectFit: "contain" }} />
+      
+      {/* Stempel SALINAN LEGALISIR (Muncul jika dicetak dari arsip) */}
+      {isCopy && (
+        <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%) rotate(-30deg)", zIndex: 0, pointerEvents: "none", opacity: 0.4 }}>
+          <div style={{ border: "5px solid #dc2626", borderRadius: "50%", width: "300px", height: "300px", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
+            <span style={{ fontSize: "40pt", fontWeight: "bold", color: "#dc2626", fontFamily: "Arial, sans-serif", lineHeight: "1.2" }}>SALINAN<br/>LEGALE</span>
+          </div>
         </div>
+      )}
+
+      <div style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", height: "100%" }}>
+        {/* KOP SURAT */}
+        <div style={{ display: "flex", borderBottom: "3px double #000", paddingBottom: "10px", marginBottom: "20px", textAlign: "center" }}>
+          <div style={{ width: "80px", marginRight: "15px", display: "flex", alignItems: "center" }}>
+            <img src="/LOGO_KOTA_BANJARMASIN_PNG.png" alt="Logo Kota Banjarmasin" style={{ width: "100%", height: "80px", objectFit: "contain" }} />
+          </div>
+          <div style={{ flex: 1 }}>
+            <h1 style={{ fontSize: "16pt", margin: 0 }}>PEMERINTAH {RT_CONFIG.kota.toUpperCase()}</h1>
+            <h2 style={{ fontSize: "14pt", margin: 0 }}>KECAMATAN {RT_CONFIG.kecamatan.toUpperCase()}</h2>
+            <h3 style={{ fontSize: "14pt", margin: 0 }}>KELURAHAN {RT_CONFIG.kelurahan.toUpperCase()}</h3>
+            <p style={{ fontSize: "10pt", marginTop: "5px" }}>{RT_CONFIG.alamatKantor}</p>
+          </div>
+        </div>
+
+        {/* JUDUL SURAT */}
+        <div style={{ textAlign: "center", marginBottom: "15px" }}>
+          <h2 style={{ fontSize: "14pt", textTransform: "uppercase", textDecoration: "underline", margin: 0 }}>{jenis}</h2>
+          <p style={{ margin: "5px 0 0 0" }}>Nomor: {nomorSurat}</p>
+          {isCopy && <p style={{ color: "#dc2626", fontWeight: "bold", marginTop: "5px" }}>(Salinan Resmi / Legalisir)</p>}
+        </div>
+
+        {/* ISI SURAT */}
         <div style={{ flex: 1 }}>
-          <h1 style={{ fontSize: "16pt", margin: 0 }}>PEMERINTAH {RT_CONFIG.kota.toUpperCase()}</h1>
-          <h2 style={{ fontSize: "14pt", margin: 0 }}>KECAMATAN {RT_CONFIG.kecamatan.toUpperCase()}</h2>
-          <h3 style={{ fontSize: "14pt", margin: 0 }}>KELURAHAN {RT_CONFIG.kelurahan.toUpperCase()}</h3>
-          <p style={{ fontSize: "10pt", marginTop: "5px" }}>{RT_CONFIG.alamatKantor}</p>
+          <p>Yang bertanda tangan di bawah ini, Ketua RT {RT_CONFIG.rt} / RW {RT_CONFIG.rw} Kelurahan {RT_CONFIG.kelurahan}, Kecamatan {RT_CONFIG.kecamatan}, {RT_CONFIG.kota}, dengan ini menerangkan bahwa:</p>
+          {tabelData}
+          {renderIsiSurat()}
+          <p style={{ marginTop: "15px" }}>Demikian surat keterangan ini dibuat dengan sebenarnya, tanpa adanya paksaan dari pihak manapun. Apabila di kemudian hari terdapat keterangan yang tidak sesuai dengan fakta di lapangan, kami pihak pengurus RT siap mempertanggungjawabkannya. Surat ini dibuat untuk dipergunakan sebagaimana mestinya.</p>
         </div>
-      </div>
 
-      {/* JUDUL SURAT */}
-      <div style={{ textAlign: "center", marginBottom: "15px" }}>
-        <h2 style={{ fontSize: "14pt", textTransform: "uppercase", textDecoration: "underline", margin: 0 }}>{jenis}</h2>
-        <p style={{ margin: "5px 0 0 0" }}>Nomor: {nomorSurat}</p>
-      </div>
-
-      {/* ISI SURAT */}
-      <div style={{ flex: 1 }}>
-        <p>Yang bertanda tangan di bawah ini, Ketua RT {RT_CONFIG.rt} / RW {RT_CONFIG.rw} Kelurahan {RT_CONFIG.kelurahan}, Kecamatan {RT_CONFIG.kecamatan}, {RT_CONFIG.kota}, dengan ini menerangkan bahwa:</p>
-        {tabelData}
-        {renderIsiSurat()}
-        <p style={{ marginTop: "15px" }}>Demikian surat keterangan ini dibuat dengan sebenarnya, tanpa adanya paksaan dari pihak manapun. Apabila di kemudian hari terdapat keterangan yang tidak sesuai dengan fakta di lapangan, kami pihak pengurus RT siap mempertanggungjawabkannya. Surat ini dibuat untuk dipergunakan sebagaimana mestinya.</p>
-      </div>
-
-      {/* TTD & QR CODE */}
-      <div style={{ width: "280px", marginLeft: "auto", textAlign: "center", marginTop: "30px" }}>
-        <p style={{ marginBottom: "5px" }}>{RT_CONFIG.kota}, {hariIni}</p>
-        <p style={{ marginBottom: "10px" }}>Ketua RT {RT_CONFIG.rt} / RW {RT_CONFIG.rw}</p>
-        <div style={{ margin: "0 auto 5px auto", width: "80px", border: "1px solid #000", padding: "5px" }}>
-          <QRCodeCanvas 
-            value={`https://siwarga.vercel.app/verify/${nomorSurat}`} 
-            size={80} 
-            level="H"
-            includeMargin={false}
-          />
+        {/* TTD & QR CODE */}
+        <div style={{ width: "280px", marginLeft: "auto", textAlign: "center", marginTop: "30px" }}>
+          <p style={{ marginBottom: "5px" }}>{RT_CONFIG.kota}, {hariIni}</p>
+          <p style={{ marginBottom: "10px" }}>Ketua RT {RT_CONFIG.rt} / RW {RT_CONFIG.rw}</p>
+          <div style={{ margin: "0 auto 5px auto", width: "80px", border: "1px solid #000", padding: "5px" }}>
+            <QRCodeCanvas 
+              value={`https://siwarga.vercel.app/verify/${nomorSurat}`} 
+              size={80} 
+              level="H"
+              includeMargin={false}
+            />
+          </div>
+          <p style={{ fontWeight: "bold", textDecoration: "underline" }}>
+            {RT_CONFIG.namaKetuaRT}
+          </p>
         </div>
-        <p style={{ fontWeight: "bold", textDecoration: "underline" }}>
-          {RT_CONFIG.namaKetuaRT}
-        </p>
+
+        {/* TEMBUSAN (Tok-tokan) */}
+        <div style={{ marginTop: "30px", fontSize: "10pt" }}>
+          <p style={{ fontWeight: "bold", marginBottom: "5px", textDecoration: "underline" }}>Tembusan:</p>
+          <p style={{ margin: 0 }}>1. Lurah {RT_CONFIG.kelurahan}</p>
+          <p style={{ margin: 0 }}>2. Arsip Ketua RT {RT_CONFIG.rt} / RW {RT_CONFIG.rw}</p>
+        </div>
       </div>
     </div>
   );
