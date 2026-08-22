@@ -1,22 +1,22 @@
 "use client";
-import { useEffect, useState, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/client";
 import SuratFormat from "@/components/templates/SuratFormat";
 
-function VerifikasiKonten() {
-  const searchParams = useSearchParams();
-  const id = searchParams.get('id');
-  
+export default function VerifySurat() {
   const [surat, setSurat] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Baca URL langsung dari browser (Cara paling dasar, tanpa hooks Next.js)
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+
     if (!id) {
       setLoading(false);
       return;
     }
-    
+
     async function fetchData() {
       const { data } = await supabase
         .from('pengajuan_surat')
@@ -29,7 +29,7 @@ function VerifikasiKonten() {
     }
     
     fetchData();
-  }, [id]);
+  }, []);
 
   if (loading) {
     return (
@@ -108,13 +108,5 @@ function VerifikasiKonten() {
         </div>
       </div>
     </div>
-  );
-}
-
-export default function VerifySurat() {
-  return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Memuat...</div>}>
-      <VerifikasiKonten />
-    </Suspense>
   );
 }
