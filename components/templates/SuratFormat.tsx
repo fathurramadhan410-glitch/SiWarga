@@ -10,7 +10,7 @@ const RT_CONFIG = {
   alamatKantor: "Jl. Tembus Mantuil, Basirih No. 51, Kec. Banjarmasin Selatan, Kota Banjarmasin 70246",
   rt: "17",
   rw: "02",
-  namaKetuaRT: "Zulkifli",
+  namaKetuaRT: "Zalkini, S.Sos", // Sesuaikan dengan nama di surat Anda
 };
 
 interface SuratProps {
@@ -41,19 +41,17 @@ export default function SuratFormat({ jenis, data, keperluan, nomorSurat }: Sura
     lineHeight: 1.5,
     color: "#000",
     width: "210mm",
-    height: "297mm",
+    minHeight: "297mm", // Pakai minHeight bukan height, agar teks tidak terpotong
     maxHeight: "297mm",
-    padding: "40mm 30mm 40mm 30mm", // Margin 4cm atas-bawah, 3cm kiri-kanan
+    padding: "25mm 25mm 20mm 25mm", // Margin 2.5cm (standar dokumen A4)
     backgroundColor: "white",
     margin: "0 auto",
     boxShadow: "0 0 10px rgba(0,0,0,0.1)",
     textAlign: "justify",
     boxSizing: "border-box",
-    overflow: "hidden",
     display: "flex",
     flexDirection: "column",
-    pageBreakAfter: "avoid",
-    pageBreakInside: "avoid",
+    overflow: "hidden",
   };
 
   const tabelData = (
